@@ -1,10 +1,18 @@
 import React, { useState } from "react";
-import Compressor from 'compressorjs';
+import Compressor from "compressorjs";
 import JSZip from "jszip";
 import "./styles.css";
+import PhoneBookForm from "./components/phoneBookForm";
+import InformationTable from "./components/informationTable";
 import DownloadLink from "./Download";
 
 export default function App() {
+  const [phoneBook, setPhoneBook] = useState([]);
+
+  const addEntryToPhoneBook = (entry) => {
+    setPhoneBook([...phoneBook, entry]);
+  };
+
   const [uploaded, setUploaded] = useState([]);
   const [show, setShow] = useState(false);
   const [isLoad, setIsLoad] = useState(false);
@@ -51,33 +59,39 @@ export default function App() {
   };
 
   return (
-    <div style={{ 
-      marginLeft: '500px',
-      paddingTop: '50px'
-     }}>
+    <div
+      style={{
+        marginLeft: "500px",
+        paddingTop: "50px",
+      }}
+    >
       <h1>Compression des images</h1>
       <div className="container">
         <input
           type="file"
-          multiple="true"
+          multiple={true}
           accept="image/png, image/jpeg, image/jpg, image/gif, image/webp, image/jfif, image/pjp, image/pjpeg"
           id="upload"
           onChange={handleFileUpload}
         />
       </div>
       <br />
-      <button onClick={handleCompression} disabled={!uploaded.length}>Compress</button>
+      <button onClick={handleCompression} disabled={!uploaded.length}>
+        Compress
+      </button>
 
       <div className="container">
-        {isLoad ?(
+        {isLoad ? (
           <div>
             {show ? (
-              <div style={{ 
-                paddingTop: '10px',
-                width: '300px',
-                display: 'flex',
-                justifyContent: 'space-evenly',
-               }}>
+              <div
+                style={{
+                  paddingTop: "10px",
+                  width: "300px",
+                  display: "flex",
+                  justifyContent: "space-evenly",
+                }}
+              >
                 <DownloadLink fileUrl={link} fileName="compressed_images.zip" />
                 <button onClick={handleReset}>Reset field</button>
               </div>
@@ -90,6 +104,10 @@ export default function App() {
         ) : (
           <p>Pas des images à extraire !!</p>
         )}
+      </div>
+      <div>
+        <PhoneBookForm addEntryToPhoneBook={addEntryToPhoneBook} />
+        <InformationTable phoneBook={phoneBook} />
       </div>
     </div>
   );
